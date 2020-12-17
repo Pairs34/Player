@@ -1,0 +1,120 @@
+object frmRegister: TfrmRegister
+  Left = 0
+  Top = 0
+  BorderStyle = bsDialog
+  Caption = 'Kay'#305't Ol'
+  ClientHeight = 122
+  ClientWidth = 413
+  Color = clBtnFace
+  CustomTitleBar.CaptionAlignment = taCenter
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object lblLicenseKey: TLinkLabel
+    Left = 10
+    Top = 8
+    Width = 77
+    Height = 17
+    Caption = 'Lisans Anahtar'#305
+    TabOrder = 0
+  end
+  object txtLicenseKey: TcxTextEdit
+    Left = 93
+    Top = 8
+    TabOrder = 1
+    TextHint = 'E'#287'itim seti ile birlikte verilen keyi giriniz.'
+    Width = 302
+  end
+  object lblName: TLinkLabel
+    Left = 37
+    Top = 35
+    Width = 50
+    Height = 17
+    Caption = 'Ad Soyad'
+    TabOrder = 2
+  end
+  object txtUsername: TcxTextEdit
+    Left = 93
+    Top = 35
+    TabOrder = 3
+    TextHint = 'Lisans sahibi bilgileri i'#231'in ad soyad gereklidir'
+    Width = 302
+  end
+  object btnRegisterProduct: TcxButton
+    Left = 184
+    Top = 89
+    Width = 75
+    Height = 25
+    Caption = 'Aktif Et'
+    OptionsImage.Glyph.SourceDPI = 96
+    OptionsImage.Glyph.Data = {
+      89504E470D0A1A0A0000000D49484452000000100000001008060000001FF3FF
+      610000001974455874536F6674776172650041646F626520496D616765526561
+      647971C9653C0000000B744558745469746C6500557365723B975B0A02000003
+      0449444154785E85CC6D4C556500C0F1FF73EEB9F71C5E5FBA5084805E3404A1
+      975D6CE29AB7E8D22460319AAEDC5C21B33E54AB451F5A35E9E56BAE56B636B7
+      F28BB659EB8353D3694CAE696AD666990485621AD20A887B41CE3DF79EF33C4F
+      B5F1810F6EFCB6FFD7BFD05AB380BE5516AED25D9E4F9FA774D4937AC2F179F3
+      C094FC5CFF875B30582423A92B0C87F7B76DDB14DBD2D793DFF154476D6EBEBD
+      AFABC67E6BE3F250E19203A9F57335D146DB3405233FFCC4A9A36789D4AF3402
+      42F75B01F1FA92035F51190C99240E9DA168F95A5ED8F90EF1AE566105835352
+      E9C62507AED4174F7F754ABF7DF8345B5FD9465585C6B61C2A8B73429E54D3DC
+      82C922E7936A4F6743F16B01D30C79C92BDC9CF9079975F1323E2349B55B0851
+      0068C05B48192C32EAA8B9F29A8A9FC72F9DC3999921353DC58DCBD7F92395FD
+      FD91BA3BBBDF68A9FE7A476CD9E44B4DA5C77BEB8B9E010C03A03F6423843081
+      8289F1E4E8F03787F96DF82FC62E8D3272710CDBB2F362D1C8CB8FF7B4AF7BF5
+      8317EDCDBD6DB11591B25DDDCBAC5E010058D5C2A8ED3082BB23A525EB538D15
+      94952A5C27C3F09843459E64D3F39DDCDBBC8623FB8F9375D314151ABCF7FEE0
+      800198F586B1666B4EEE60DBC696F5F127BA71FD42D6753D464D53145FD99896
+      66F53D11B497269B76C8A4E7893616E366D503269077BF11E8ABBFBB215C19A9
+      66F697215626A7F96CE7217CE973873B87E364484E4E717B384467671D2A9362
+      60600847AAB326505082D850BEA20AE7C63899C9BFA9F67D4AB3B34CBA2E9743
+      3EED4FC6290B07F9F3DA35F28359BE3D33CAC16357BD79C9972660E70A515E50
+      52C4FCD075B421F09464DAF3B86249DAB7B7126BB98BC4B1EFF9785782D9B464
+      CE57171CC99EA1349F9A005A0B007CC7416B8DA3E1AAE5F3684F9C58BC969347
+      CEB3F7C3419A119C4B6AEF043C0BFC08481348FEAAE5DE839FECDB2E354820A5
+      2466433E0F3EBC9AC4D1EFF8E8DD13E42415178009F80218BF79E0217FED9604
+      0026500634004D0BB53CBD2A4F6FAEB2F486DB0227038256A019B80F28078275
+      39F07FFF024D534A4D4C5CABB90000000049454E44AE426082}
+    TabOrder = 4
+    OnClick = btnRegisterProductClick
+  end
+  object lblMail: TLinkLabel
+    Left = 32
+    Top = 62
+    Width = 55
+    Height = 17
+    Caption = 'Mail Adresi'
+    TabOrder = 5
+  end
+  object txtMail: TcxTextEdit
+    Left = 93
+    Top = 62
+    TabOrder = 6
+    TextHint = 'Lisans sahibi bilgileri i'#231'in mail gereklidir'
+    Width = 302
+  end
+  object httpClient: TIdHTTP
+    ProxyParams.BasicAuthentication = False
+    ProxyParams.ProxyPort = 0
+    Request.ContentLength = -1
+    Request.ContentRangeEnd = -1
+    Request.ContentRangeStart = -1
+    Request.ContentRangeInstanceLength = -1
+    Request.Accept = 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+    Request.BasicAuthentication = False
+    Request.UserAgent = 'PairsX RESTClient/1.0'
+    Request.Ranges.Units = 'bytes'
+    Request.Ranges = <>
+    HTTPOptions = [hoForceEncodeParams]
+    Left = 24
+    Top = 80
+  end
+end

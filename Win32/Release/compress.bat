@@ -1,0 +1,1 @@
+upx.exe -qvfk Player.exe
