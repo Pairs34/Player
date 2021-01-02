@@ -83,7 +83,7 @@ object frmRegister: TfrmRegister
       2466433E0F3EBC9AC4D1EFF8E8DD13E42415178009F80218BF79E0217FED9604
       0026500634004D0BB53CBD2A4F6FAEB2F486DB0227038256A019B80F28078275
       39F07FFF024D534A4D4C5CABB90000000049454E44AE426082}
-    TabOrder = 4
+    TabOrder = 6
     OnClick = btnRegisterProductClick
   end
   object lblMail: TLinkLabel
@@ -92,12 +92,12 @@ object frmRegister: TfrmRegister
     Width = 55
     Height = 17
     Caption = 'Mail Adresi'
-    TabOrder = 5
+    TabOrder = 4
   end
   object txtMail: TcxTextEdit
     Left = 93
     Top = 62
-    TabOrder = 6
+    TabOrder = 5
     TextHint = 'Lisans sahibi bilgileri i'#231'in mail gereklidir'
     Width = 302
   end

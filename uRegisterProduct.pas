@@ -28,7 +28,7 @@ type
     const
       LicenseResponse: array[0..5] of string = ('LICENSE_NOTFOUND', 'ACTIVATION_ERROR', 'REGISTRATION_ERROR', 'ONLY_ALLOWED_POST', 'LICENSE_ALREADY_REGISTERED', 'LICENSE_OK');
     const
-      REGISTER_URI: string = 'http://license.videomanager.com/license/RegisterLicense';
+      REGISTER_URI: string = 'http://license.gorselegitim.com.tr/license/RegisterLicense';
   public
     { Public declarations }
   end;
