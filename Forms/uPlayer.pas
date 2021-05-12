@@ -1,4 +1,4 @@
-unit uPlayer;
+﻿unit uPlayer;
 
 interface
 
@@ -11,7 +11,8 @@ uses
   cxShellCommon, cxContainer, cxEdit, cxTreeView, cxShellTreeView,
   System.IOUtils, BoxedAppSDK_Static, CryptBase, AESObj, TMSEncryptedIniFile,
 
-  dxStatusBar, Winapi.ShlObj;
+  dxStatusBar, Winapi.ShlObj, Vcl.Menus, IdBaseComponent, IdComponent,
+  IdTCPConnection, IdTCPClient, IdHTTP,System.StrUtils;
 
 type
   TfrmPlayer = class(TForm)
@@ -24,15 +25,24 @@ type
     dxStatusBar: TdxStatusBar;
     dxStatusBarContainer1: TdxStatusBarContainerControl;
     progress: TProgressBar;
+    mainMenu: TMainMenu;
+    btnDeactivate: TMenuItem;
+    httpClient: TIdHTTP;
     procedure FormActivate(Sender: TObject);
     procedure lstVideosDblClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure AESEncryptionChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure playerPlayStateChange(ASender: TObject; NewState: Integer);
+    procedure btnDeactivateClick(Sender: TObject);
   private
-    const
-      PLAYER_INFO_URI: string = 'http://license.videomanager.com/license/GetInfo';
+    const PLAYER_INFO_URI: string = 'http://license.videomanager.com/license/GetInfo';
+    const DEACTIVATE_URI: string = 'http://license.gorselegitim.com.tr/activation/DeactivateFromUser';
+    const DeactivateResponse: array[0..3] of string = (
+                          'LICENSE_NOTFOUND',
+                          'LICENSE_NOT_DEACTIVATED',
+                          'ACTIVATION_NOTFOUND',
+                          'LICENSE_DEACTIVATED');
   public
     { Public declarations }
 
@@ -54,6 +64,60 @@ procedure TfrmPlayer.AESEncryptionChange(Sender: TObject);
 begin
   progress.Position := AESEncryption.Progress;
 
+end;
+
+procedure TfrmPlayer.btnDeactivateClick(Sender: TObject);
+var
+  encryptedFile: TEncryptedIniFile;
+  licenseKey, bContent, bDecodedContent : string;
+  bPostData: TStringList;
+begin
+  encryptedFile := TEncryptedIniFile.Create(TPath.Combine(ExtractFileDir(Application.ExeName), '.data'), uHelper.MasterKey);
+  licenseKey := encryptedFile.ReadString('PROTECTION', 'licenseKey','');
+
+  if MessageDlg('Programı deaktif yapmak istediğinize eminmisiniz ?',
+    mtConfirmation, [mbYes, mbNo], 0, mbYes) = mrYes then
+  begin
+    bPostData := TStringList.Create;
+    bPostData.Values['licenseKey'] := licenseKey;
+    try
+      bContent := httpClient.Post(DEACTIVATE_URI, bPostData);
+    except on E: EIdHTTPProtocolException do begin
+      ShowMessage(E.Message); Exit;
+    end;
+    end;
+    bDecodedContent := Base64Decode(Copy(bContent, 11, Length(bContent)));
+    case IndexStr(bDecodedContent, DeactivateResponse) of
+      0..2:
+        begin
+          ShowMessage(format('Hata oluştu hata kodu : %s', [bDecodedContent]));
+        end;
+      3:
+        begin
+          try
+            try
+              encryptedFile.DeleteKey('PROTECTION','licenseKey');
+              encryptedFile.DeleteKey('PROTECTION','hwid');
+              encryptedFile.UpdateFile;
+              encryptedFile.Free;
+
+              ShowMessage('Program başarılı bir şekilde deaktif edilmiştir.');
+              Application.Terminate;
+            finally
+            end;
+          except
+            on E: Exception do
+            begin
+              ShowMessage(E.Message);
+            end;
+          end;
+        end
+    else
+      begin
+        ShowMessage('Lisans devredışı bırakılırken hata oluştu lütfen desteğe başvurunuz.');
+      end;
+    end;
+  end;
 end;
 
 procedure TfrmPlayer.FormActivate(Sender: TObject);

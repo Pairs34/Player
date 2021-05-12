@@ -1,4 +1,4 @@
-unit uRegisterProduct;
+ï»¿unit uRegisterProduct;
 
 interface
 
@@ -71,7 +71,7 @@ begin
     case IndexStr(bDecodedContent, LicenseResponse) of
       0..4:
         begin
-          ShowMessage(format('Hata oluştu hata kodu : %s', [bDecodedContent]));
+          ShowMessage(format('Hata oluÅŸtu hata kodu : %s', [bDecodedContent]));
         end;
       5:
         begin
@@ -82,7 +82,7 @@ begin
               bEncryptedFile.UpdateFile;
               bEncryptedFile.Free;
 
-              ShowMessage('Aktivasyonun tamamlanması için yeniden başlatınız.');
+              ShowMessage('Aktivasyonun tamamlanmasÄ± iÃ§in yeniden baÅŸlatÄ±nÄ±z.');
               Application.Terminate;
             finally
             end;
@@ -95,13 +95,13 @@ begin
         end
     else
       begin
-        ShowMessage('Lisanslama yapılırken hata oluştu lütfen desteğe başvurunuz.');
+        ShowMessage('Lisanslama yapÄ±lÄ±rken hata oluÅŸtu lÃ¼tfen desteÄŸe baÅŸvurunuz.');
       end;
     end;
   except
     on E: Exception do
     begin
-      ShowMessage('Sunucu ile iletişimde hata oluştu.');
+      ShowMessage('Sunucu ile iletiÅŸimde hata oluÅŸtu.');
     end;
   end;
   btnRegisterProduct.Enabled := true;

@@ -13,7 +13,8 @@ uses
   System.IOUtils,
   BoxedAppSDK_Static in 'BoxedAppSDK_Static.pas',
   GetWMI_Info in 'Helper\GetWMI_Info.pas',
-  uHelper in 'Helper\uHelper.pas';
+  uHelper in 'Helper\uHelper.pas',
+  WMPLib_TLB in '..\..\..\..\documents\Embarcadero\Studio\21.0\Imports\WMPLib_TLB.pas';
 
 {$R *.res}
 

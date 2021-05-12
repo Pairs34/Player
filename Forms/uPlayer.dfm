@@ -1,7 +1,7 @@
 object frmPlayer: TfrmPlayer
   Left = 0
   Top = 0
-  Caption = 'frmPlayer'
+  Caption = 'Player'
   ClientHeight = 454
   ClientWidth = 669
   Color = clBtnFace
@@ -11,6 +11,7 @@ object frmPlayer: TfrmPlayer
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
+  Menu = mainMenu
   OldCreateOrder = False
   WindowState = wsMaximized
   OnActivate = FormActivate
@@ -112,5 +113,29 @@ object frmPlayer: TfrmPlayer
     OnChange = AESEncryptionChange
     Left = 256
     Top = 24
+  end
+  object mainMenu: TMainMenu
+    Left = 328
+    Top = 232
+    object btnDeactivate: TMenuItem
+      Caption = 'Pasif Yap'
+      OnClick = btnDeactivateClick
+    end
+  end
+  object httpClient: TIdHTTP
+    ProxyParams.BasicAuthentication = False
+    ProxyParams.ProxyPort = 0
+    Request.ContentLength = -1
+    Request.ContentRangeEnd = -1
+    Request.ContentRangeStart = -1
+    Request.ContentRangeInstanceLength = -1
+    Request.Accept = 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+    Request.BasicAuthentication = False
+    Request.UserAgent = 'Mozilla/3.0 (compatible; Indy Library)'
+    Request.Ranges.Units = 'bytes'
+    Request.Ranges = <>
+    HTTPOptions = [hoForceEncodeParams]
+    Left = 448
+    Top = 200
   end
 end
