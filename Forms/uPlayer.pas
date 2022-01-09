@@ -123,7 +123,6 @@ end;
 procedure TfrmPlayer.FormActivate(Sender: TObject);
 begin
   lstVideos.Root.CustomPath := ExtractFileDir(Application.ExeName);
-
 end;
 
 procedure TfrmPlayer.FormClose(Sender: TObject; var Action: TCloseAction);
