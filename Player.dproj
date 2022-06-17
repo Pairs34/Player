@@ -145,7 +145,6 @@
             <Form>frmPlayer</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="BoxedAppSDK_DLL.pas"/>
         <DCCReference Include="BoxedAppSDK_Static.pas"/>
         <DCCReference Include="Helper\GetWMI_Info.pas"/>
         <DCCReference Include="Helper\uHelper.pas"/>

@@ -184,13 +184,21 @@ begin
 
     FreeAndNil(bStream);
 
-    Handle := BoxedAppSDK_CreateVirtualFileBasedOnBuffer(PWideChar('1' + bExtension), GENERIC_WRITE, FILE_SHARE_READ, nil, CREATE_NEW, 0, 0, oStream.Memory, oStream.Size);
+    Handle := BoxedAppSDK_CreateVirtualFileBasedOnBuffer(PWideChar(TPath.Combine(GetCurrentDir,'1.mp4')),
+        GENERIC_READ,
+        FILE_SHARE_READ,
+        nil,
+        CREATE_ALWAYS,
+        FILE_ATTRIBUTE_NORMAL,
+        0,
+        oStream.Memory,
+        oStream.Size);
 
     CloseHandle(Handle);
     player.uiMode := 'full';
     player.settings.setMode('loop', False);
     isDecrypting := false;
-    player.URL := '1' + bExtension;
+    player.URL := TPath.Combine(GetCurrentDir,'1.mp4');
     lstVideos.Enabled := true;
   end;
 end;

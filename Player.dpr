@@ -7,7 +7,6 @@ uses
   Vcl.Styles,
   uDbHelper in 'DB\uDbHelper.pas' {dbModule: TDataModule},
   uPlayer in 'Forms\uPlayer.pas' {frmPlayer},
-  BoxedAppSDK_DLL in 'BoxedAppSDK_DLL.pas',
   TMSEncryptedIniFile,
   System.SysUtils,
   System.IOUtils,
@@ -36,6 +35,7 @@ begin
     end
     else
     begin
+      //Application.CreateForm(TfrmPlayer, frmPlayer);
       Application.CreateForm(TfrmRegister, frmRegister);
     end;
   end;
