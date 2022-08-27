@@ -12,7 +12,7 @@ uses
   System.IOUtils, BoxedAppSDK_Static, CryptBase, AESObj, TMSEncryptedIniFile,
 
   dxStatusBar, Winapi.ShlObj, Vcl.Menus, IdBaseComponent, IdComponent,
-  IdTCPConnection, IdTCPClient, IdHTTP,System.StrUtils;
+  IdTCPConnection, IdTCPClient, IdHTTP,System.StrUtils, MSI_Common, MSI_CPU;
 
 type
   TfrmPlayer = class(TForm)
@@ -28,6 +28,7 @@ type
     mainMenu: TMainMenu;
     btnDeactivate: TMenuItem;
     httpClient: TIdHTTP;
+    MiTeC_CPU1: TMiTeC_CPU;
     procedure FormActivate(Sender: TObject);
     procedure lstVideosDblClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -69,11 +70,20 @@ end;
 procedure TfrmPlayer.btnDeactivateClick(Sender: TObject);
 var
   encryptedFile: TEncryptedIniFile;
-  licenseKey, bContent, bDecodedContent : string;
+  licenseKey, bContent, bDecodedContent,bKey,bIV : string;
   bPostData: TStringList;
 begin
   encryptedFile := TEncryptedIniFile.Create(TPath.Combine(ExtractFileDir(Application.ExeName), '.data'), uHelper.MasterKey);
   licenseKey := encryptedFile.ReadString('PROTECTION', 'licenseKey','');
+  bKey := encryptedFile.ReadString('PROTECTION', 'videoKey','');
+  bIV := encryptedFile.ReadString('PROTECTION', 'videoIV','');
+
+  if (licenseKey = '') and (bKey = '') and (bIV = '') then
+  begin
+    ShowMessage('Pasif yapma esnasında hata oluştu. LKEY');
+    Application.Terminate;
+    Exit;
+  end;
 
   if MessageDlg('Programı deaktif yapmak istediğinize eminmisiniz ?',
     mtConfirmation, [mbYes, mbNo], 0, mbYes) = mrYes then
@@ -98,12 +108,14 @@ begin
             try
               encryptedFile.DeleteKey('PROTECTION','licenseKey');
               encryptedFile.DeleteKey('PROTECTION','hwid');
+              encryptedFile.WriteString('PROTECTION', 'videoKey', bKey);
+              encryptedFile.WriteString('PROTECTION', 'videoIV', bIV);
               encryptedFile.UpdateFile;
-              encryptedFile.Free;
 
               ShowMessage('Program başarılı bir şekilde deaktif edilmiştir.');
               Application.Terminate;
             finally
+              encryptedFile.Free;
             end;
           except
             on E: Exception do

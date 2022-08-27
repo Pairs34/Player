@@ -11,7 +11,6 @@ uses
   System.SysUtils,
   System.IOUtils,
   BoxedAppSDK_Static in 'BoxedAppSDK_Static.pas',
-  GetWMI_Info in 'Helper\GetWMI_Info.pas',
   uHelper in 'Helper\uHelper.pas',
   WMPLib_TLB in 'WMPLib_TLB.pas';
 
@@ -19,6 +18,7 @@ uses
 
 var
   localHwid: string;
+  calculatedhwid: string;
 
 begin
   Application.Initialize;
@@ -27,8 +27,11 @@ begin
   Application.CreateForm(TdbModule, dbModule);
   if FileExists(TPath.Combine(ExtractFileDir(Application.ExeName), '.data')) then
   begin
+    Application.CreateForm(TfrmPlayer, frmPlayer);
     bEncryptedFile := TEncryptedIniFile.Create(TPath.Combine(ExtractFileDir(Application.ExeName), '.data'), uHelper.MasterKey);
     localHwid := bEncryptedFile.ReadString('PROTECTION', 'hwid', '');
+    calculatedhwid := GetCPUSerialumber;
+
     if localHwid = GetCPUSerialumber then
     begin
       Application.CreateForm(TfrmPlayer, frmPlayer);

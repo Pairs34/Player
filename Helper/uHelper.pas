@@ -3,7 +3,7 @@ unit uHelper;
 interface
 
 uses
-  idGlobal, IdCoderMIME, System.SysUtils, System.NetEncoding, Variants;
+  idGlobal, IdCoderMIME, System.SysUtils, System.NetEncoding, Variants, MSI_Common, MSI_CPU;
 
 const
   Codes64 = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz+/';
@@ -16,9 +16,6 @@ function IsEmptyOrNull(const Value: Variant): Boolean;
 function GetCPUSerialumber: string;
 
 implementation
-
-uses
-  GetWMI_Info;
 
 function Base64Decode(T: string): string;
 begin
@@ -33,8 +30,12 @@ begin
 end;
 
 function GetCPUSerialumber: string;
+var
+  CPU: TMiTeC_CPU;
 begin
-  Result := GetWin32_ProcessorInfo + GetWin32_MotherBoardInfo;
+  CPU:=TMiTeC_CPU.Create(nil);
+  CPU.RefreshData();
+  Result := CPU.SerialNumber;
 end;
 
 end.

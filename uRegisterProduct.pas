@@ -24,6 +24,7 @@ type
     txtMail: TcxTextEdit;
     procedure btnRegisterProductClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
   private
     const
       LicenseResponse: array[0..5] of string = ('LICENSE_NOTFOUND', 'ACTIVATION_ERROR', 'REGISTRATION_ERROR', 'ONLY_ALLOWED_POST', 'LICENSE_ALREADY_REGISTERED', 'LICENSE_OK');
@@ -46,20 +47,30 @@ uses
 
 procedure TfrmRegister.btnRegisterProductClick(Sender: TObject);
 var
-  bContent, bDecodedContent: string;
+  bContent, bDecodedContent,bKey ,bIV: string;
   bPostData: TStringList;
 begin
   btnRegisterProduct.Enabled := false;
   try
     bEncryptedFile := TEncryptedIniFile.Create(TPath.Combine(ExtractFileDir(Application.ExeName), '.data'), uHelper.MasterKey);
 
+    bKey := bEncryptedFile.ReadString('PROTECTION', 'videoKey', '');
+    bIV  := bEncryptedFile.ReadString('PROTECTION', 'videoIV', '');
+
+    if (bKey = '') and (bIV = '') then
+    begin
+      ShowMessage('Kayıt esnasında hata oluştu. VKEY');
+      Application.Terminate;
+      Exit;
+    end;
+
     bPostData := TStringList.Create;
     bPostData.Values['licenseKey'] := txtLicenseKey.Text;
     bPostData.Values['username'] := txtUsername.Text;
     bPostData.Values['hwid'] := GetCPUSerialumber;
     bPostData.Values['mail'] := txtMail.Text;
-    bPostData.Values['videoKey'] := bEncryptedFile.ReadString('PROTECTION', 'videoKey', '');
-    bPostData.Values['videoIV'] := bEncryptedFile.ReadString('PROTECTION', 'videoIV', '');
+    bPostData.Values['videoKey'] := bKey;
+    bPostData.Values['videoIV'] := bIV;
 
     try
       bContent := httpClient.Post(REGISTER_URI, bPostData);
@@ -123,6 +134,11 @@ begin
 //      Self.Hide;
 //    end;
 //  end;
+end;
+
+procedure TfrmRegister.FormShow(Sender: TObject);
+begin
+  ShowMessage(GetCPUSerialumber);
 end;
 
 end.

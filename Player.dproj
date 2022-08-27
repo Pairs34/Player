@@ -4,7 +4,7 @@
         <ProjectVersion>19.2</ProjectVersion>
         <FrameworkType>VCL</FrameworkType>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <Platform Condition="'$(Platform)'==''">Win32</Platform>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Application</AppType>
@@ -146,7 +146,6 @@
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="BoxedAppSDK_Static.pas"/>
-        <DCCReference Include="Helper\GetWMI_Info.pas"/>
         <DCCReference Include="Helper\uHelper.pas"/>
         <DCCReference Include="WMPLib_TLB.pas"/>
         <BuildConfiguration Include="Release">
