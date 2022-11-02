@@ -36,6 +36,7 @@ type
     procedure FormCreate(Sender: TObject);
     procedure playerPlayStateChange(ASender: TObject; NewState: Integer);
     procedure btnDeactivateClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
   private
     const PLAYER_INFO_URI: string = 'http://license.videomanager.com/license/GetInfo';
     const DEACTIVATE_URI: string = 'http://license.gorselegitim.com.tr/activation/DeactivateFromUser';
@@ -51,7 +52,6 @@ type
 
 var
   frmPlayer: TfrmPlayer;
-  oStream: TMemoryStream;
   isDecrypting: bool;
 
 implementation
@@ -64,7 +64,6 @@ uses
 procedure TfrmPlayer.AESEncryptionChange(Sender: TObject);
 begin
   progress.Position := AESEncryption.Progress;
-
 end;
 
 procedure TfrmPlayer.btnDeactivateClick(Sender: TObject);
@@ -144,13 +143,17 @@ end;
 
 procedure TfrmPlayer.FormCreate(Sender: TObject);
 begin
-  oStream := TMemoryStream.Create;
   player.uiMode := 'none';
+end;
+
+procedure TfrmPlayer.FormShow(Sender: TObject);
+begin
+ShowMessage(GetCPUSerialumber);
 end;
 
 procedure TfrmPlayer.lstVideosDblClick(Sender: TObject);
 var
-  Handle: THandle;
+  fHandle: THandle;
   bExtension: string;
   bStream: THandleStream;
   encryptedFile: TEncryptedIniFile;
@@ -168,8 +171,17 @@ begin
     player.URL := 'loading.gif';
     player.settings.setMode('loop', True);
 
-    if oStream.Size > 0 then
-      oStream.Clear;
+    fHandle := BoxedAppSDK_CreateVirtualFile(
+      PWideChar(TPath.Combine(GetCurrentDir,'1.mp4')),
+      GENERIC_WRITE,
+      FILE_SHARE_READ,
+      nil,
+      CREATE_NEW,
+      0,
+      0
+    );
+
+    var fHandleStream := THandleStream.Create(fHandle);
 
     TThread.CreateAnonymousThread(
       procedure
@@ -184,7 +196,7 @@ begin
           key := encryptedFile.ReadString('PROTECTION', 'videoKey', '');
           IV := encryptedFile.ReadString('PROTECTION', 'videoIV', '');
         end;
-        AESEncryption.DecryptStream(bStream, oStream);
+        AESEncryption.DecryptStream(bStream, fHandleStream);
 
         taskRunning := true;
       end).Start;
@@ -194,19 +206,11 @@ begin
       Application.ProcessMessages;
     end;
 
-    FreeAndNil(bStream);
-
-    Handle := BoxedAppSDK_CreateVirtualFileBasedOnBuffer(PWideChar(TPath.Combine(GetCurrentDir,'1.mp4')),
-        GENERIC_READ,
-        FILE_SHARE_READ,
-        nil,
-        CREATE_ALWAYS,
-        FILE_ATTRIBUTE_NORMAL,
-        0,
-        oStream.Memory,
-        oStream.Size);
-
     CloseHandle(Handle);
+    FreeAndNil(fHandleStream);
+    FreeAndNil(bStream);
+    FreeAndNil(encryptedFile);
+
     player.uiMode := 'full';
     player.settings.setMode('loop', False);
     isDecrypting := false;
@@ -237,7 +241,6 @@ begin
       begin
         if not isDecrypting then
         begin
-          oStream.Clear;
           player.uiMode := 'none';
         end;
       end;

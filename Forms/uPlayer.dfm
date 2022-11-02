@@ -1,7 +1,7 @@
 object frmPlayer: TfrmPlayer
   Left = 0
   Top = 0
-  Caption = 'Player'
+  Caption = 'Player v1.0.1'
   ClientHeight = 648
   ClientWidth = 1023
   Color = clBtnFace
@@ -17,6 +17,7 @@ object frmPlayer: TfrmPlayer
   OnActivate = FormActivate
   OnClose = FormClose
   OnCreate = FormCreate
+  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   object leftPanel: TPanel
@@ -66,12 +67,12 @@ object frmPlayer: TfrmPlayer
       ExplicitWidth = 245
       ExplicitHeight = 240
       ControlData = {
-        000300000800000000000500000000000000F03F030000000000050000000000
-        0000000008000200000000000300010000000B00FFFF0300000000000B00FFFF
-        08000200000000000300320000000B00000008000A000000660075006C006C00
-        00000B0000000B0000000B00FFFF0B00FFFF0B00000008000200000000000800
-        020000000000080002000000000008000200000000000B00000094550000B340
-        0000}
+        0003000008000200000000000500000000000000F03F03000000000005000000
+        00000000000008000200000000000300010000000B00FFFF0300000000000B00
+        FFFF08000200000000000300320000000B00000008000A000000660075006C00
+        6C0000000B0000000B00FFFF0B00FFFF0B00FFFF0B0000000800020000000000
+        0800020000000000080002000000000008000200000000000B00000094550000
+        B3400000}
     end
   end
   object dxStatusBar: TdxStatusBar
@@ -109,6 +110,8 @@ object frmPlayer: TfrmPlayer
   object AESEncryption: TAESEncryption
     Version = '4.2.5.0'
     key = 'tktuzlashipyardd'
+    outputFormat = raw
+    IVMode = userdefined
     IV = 'tktuzlashipyardd'
     OnChange = AESEncryptionChange
     Left = 256

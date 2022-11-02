@@ -10,6 +10,7 @@ uses
   TMSEncryptedIniFile,
   System.SysUtils,
   System.IOUtils,
+  LoggerPro.GlobalLogger,
   BoxedAppSDK_Static in 'BoxedAppSDK_Static.pas',
   uHelper in 'Helper\uHelper.pas',
   WMPLib_TLB in 'WMPLib_TLB.pas';
@@ -18,7 +19,6 @@ uses
 
 var
   localHwid: string;
-  calculatedhwid: string;
 
 begin
   Application.Initialize;
@@ -27,20 +27,30 @@ begin
   Application.CreateForm(TdbModule, dbModule);
   if FileExists(TPath.Combine(ExtractFileDir(Application.ExeName), '.data')) then
   begin
-    Application.CreateForm(TfrmPlayer, frmPlayer);
     bEncryptedFile := TEncryptedIniFile.Create(TPath.Combine(ExtractFileDir(Application.ExeName), '.data'), uHelper.MasterKey);
     localHwid := bEncryptedFile.ReadString('PROTECTION', 'hwid', '');
-    calculatedhwid := GetCPUSerialumber;
-
-    if localHwid = GetCPUSerialumber then
+    Log.Info(localHwid,'player');
+    if localHwid.Length > 0 then
     begin
-      Application.CreateForm(TfrmPlayer, frmPlayer);
-    end
-    else
+        if localHwid = GetCPUSerialumber then
+        begin
+          Log.Info('Hwid compare is ok','player');
+          Application.CreateForm(TfrmPlayer, frmPlayer);
+        end
+        else
+        begin
+          Log.Info('Hwid compare not ok', 'player');
+          Application.CreateForm(TfrmPlayer, frmPlayer);
+          //Application.CreateForm(TfrmRegister, frmRegister);
+        end;
+    end else
     begin
-      //Application.CreateForm(TfrmPlayer, frmPlayer);
-      Application.CreateForm(TfrmRegister, frmRegister);
+      Log.Info('LH not ready', 'player');
+          Application.CreateForm(TfrmPlayer, frmPlayer);
+          //Application.CreateForm(TfrmRegister, frmRegister);
     end;
+  end else begin
+    Log.Debug('Data file not found','player');
   end;
   Application.Run;
 end.

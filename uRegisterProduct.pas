@@ -10,7 +10,7 @@ uses
   Data.Bind.Components, System.StrUtils, typinfo,
   Data.Bind.ObjectScope, System.JSON, IdBaseComponent, IdComponent,
   System.IOUtils, IdTCPConnection, IdTCPClient, IdHTTP, TMSEncryptedIniFile,
-  REST.Client;
+  REST.Client,LoggerPro.GlobalLogger;
 
 type
   TfrmRegister = class(TForm)
@@ -24,7 +24,6 @@ type
     txtMail: TcxTextEdit;
     procedure btnRegisterProductClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
-    procedure FormShow(Sender: TObject);
   private
     const
       LicenseResponse: array[0..5] of string = ('LICENSE_NOTFOUND', 'ACTIVATION_ERROR', 'REGISTRATION_ERROR', 'ONLY_ALLOWED_POST', 'LICENSE_ALREADY_REGISTERED', 'LICENSE_OK');
@@ -43,7 +42,7 @@ implementation
 {$R *.dfm}
 
 uses
-  uHelper, uPlayer;
+  uHelper;
 
 procedure TfrmRegister.btnRegisterProductClick(Sender: TObject);
 var
@@ -118,27 +117,10 @@ begin
   btnRegisterProduct.Enabled := true;
 end;
 
-procedure TfrmRegister.FormCreate(Sender: TObject);
-var
-  localHwid: string;
-begin
-//  if FileExists(TPath.Combine(ExtractFileDir(Application.ExeName), '.data')) then
-//  begin
-//    bEncryptedFile := TEncryptedIniFile.Create(TPath.Combine(ExtractFileDir(Application.ExeName), '.data'), uHelper.MasterKey);
-//    localHwid := bEncryptedFile.ReadString('PROTECTION', 'hwid', '');
-//    if localHwid = GetCPUSerialumber then //fixlenecek
-//    begin
-//      bEncryptedFile.Free;
-//      Application.CreateForm(TfrmPlayer, frmPlayer);
-//      frmPlayer.Show();
-//      Self.Hide;
-//    end;
-//  end;
-end;
 
-procedure TfrmRegister.FormShow(Sender: TObject);
+procedure TfrmRegister.FormCreate(Sender: TObject);
 begin
-  ShowMessage(GetCPUSerialumber);
+  Log.Info('Init Register Form', 'player');
 end;
 
 end.
