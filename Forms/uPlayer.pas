@@ -12,7 +12,8 @@ uses
   System.IOUtils, BoxedAppSDK_Static, CryptBase, AESObj, TMSEncryptedIniFile,
 
   dxStatusBar, Winapi.ShlObj, Vcl.Menus, IdBaseComponent, IdComponent,
-  IdTCPConnection, IdTCPClient, IdHTTP,System.StrUtils, MSI_Common, MSI_CPU;
+  IdTCPConnection, IdTCPClient, IdHTTP,System.StrUtils, MSI_Common, MSI_CPU,
+  Vcl.MPlayer;
 
 type
   TfrmPlayer = class(TForm)
@@ -89,12 +90,16 @@ begin
   begin
     bPostData := TStringList.Create;
     bPostData.Values['licenseKey'] := licenseKey;
+
     try
       bContent := httpClient.Post(DEACTIVATE_URI, bPostData);
-    except on E: EIdHTTPProtocolException do begin
-      ShowMessage(E.Message); Exit;
+
+      except on E: EIdHTTPProtocolException do begin
+        ShowMessage(E.Message);
+        Exit;
+      end;
     end;
-    end;
+
     bDecodedContent := Base64Decode(Copy(bContent, 11, Length(bContent)));
     case IndexStr(bDecodedContent, DeactivateResponse) of
       0..2:
@@ -154,7 +159,7 @@ end;
 procedure TfrmPlayer.lstVideosDblClick(Sender: TObject);
 var
   fHandle: THandle;
-  bExtension: string;
+  bExtension,bVkey,bVIV: string;
   bStream: THandleStream;
   encryptedFile: TEncryptedIniFile;
   taskRunning: bool;
@@ -170,6 +175,17 @@ begin
     player.uiMode := 'none';
     player.URL := 'loading.gif';
     player.settings.setMode('loop', True);
+
+    encryptedFile := TEncryptedIniFile.Create(TPath.Combine(ExtractFileDir(Application.ExeName), '.data'), uHelper.MasterKey);
+
+    bVKey := encryptedFile.ReadString('PROTECTION', 'videoKey', '');
+    bVIV := encryptedFile.ReadString('PROTECTION', 'videoIV', '');
+
+    if (bVKey = '') and (bVIV = '') then
+    begin
+      ShowMessage('Video şifrelemesinde hata oluşmuş. Lütfen tekrar şifrelenmesini talep ediniz.');
+      Exit;
+    end;
 
     fHandle := BoxedAppSDK_CreateVirtualFile(
       PWideChar(TPath.Combine(GetCurrentDir,'1.mp4')),
@@ -188,14 +204,14 @@ begin
       begin
 
         bStream := TFileStream.Create(lstVideos.Path, fmOpenRead);
-        encryptedFile := TEncryptedIniFile.Create(TPath.Combine(ExtractFileDir(Application.ExeName), '.data'), uHelper.MasterKey);
 
         with AESEncryption do
         begin
           IVMode := TIVMode.userdefined;
-          key := encryptedFile.ReadString('PROTECTION', 'videoKey', '');
-          IV := encryptedFile.ReadString('PROTECTION', 'videoIV', '');
+          key := bVKey;
+          IV  := bVIV;
         end;
+
         AESEncryption.DecryptStream(bStream, fHandleStream);
 
         taskRunning := true;
@@ -206,7 +222,7 @@ begin
       Application.ProcessMessages;
     end;
 
-    CloseHandle(Handle);
+    CloseHandle(fHandle);
     FreeAndNil(fHandleStream);
     FreeAndNil(bStream);
     FreeAndNil(encryptedFile);

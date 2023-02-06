@@ -64,8 +64,9 @@ object frmPlayer: TfrmPlayer
       Align = alClient
       TabOrder = 0
       OnPlayStateChange = playerPlayStateChange
-      ExplicitWidth = 245
-      ExplicitHeight = 240
+      ExplicitTop = 224
+      ExplicitWidth = 424
+      ExplicitHeight = 403
       ControlData = {
         0003000008000200000000000500000000000000F03F03000000000005000000
         00000000000008000200000000000300010000000B00FFFF0300000000000B00
