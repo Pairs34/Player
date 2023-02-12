@@ -4,3 +4,7 @@
 2022-11-02 23:43:31:626  [TID 10220   ][DEBUG     ] Data file not found [player]
 2022-11-04 22:34:31:382  [TID 19184   ][DEBUG     ] Data file not found [player]
 2022-11-04 22:35:14:579  [TID 3144    ][DEBUG     ] Data file not found [player]
+2023-02-06 23:04:22:453  [TID 9644    ][INFO      ] D:\Projects\Delphi\Player\Win32\Release\.data [player]
+2023-02-06 23:04:22:454  [TID 9644    ][INFO      ] 0003-06C3-BFEB-FBFF-7FFA-FBBF [player]
+2023-02-06 23:04:23:697  [TID 9644    ][INFO      ] Hwid compare not ok [player]
+2023-02-06 23:04:23:714  [TID 9644    ][INFO      ] Init Register Form [player]
